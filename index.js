@@ -37,7 +37,8 @@ unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/
     res.send(responseText);
     responseText = "";
     total = 0;
-    
+    ing = [];
+
 	}
 	});
 
@@ -48,10 +49,9 @@ unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/
 
 
 function buildResponse(ing, total) {
-  let counter = 1;
   let textRes = "Shopping list for Brownies: ";
   ing.map(x => {
-    textRes = textRes.concat(counter + ". " + x + " ");
+    textRes = textRes.concat(x + ", ");
     counter++;
   })
   //console.log(total)
