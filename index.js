@@ -35,6 +35,7 @@ unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/
 
     let responseText = buildResponse(ing, total);
     res.send(responseText);
+    responseText = "";
 	}
 	});
 
