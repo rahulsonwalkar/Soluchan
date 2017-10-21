@@ -5,7 +5,7 @@ app.get("/brownies", function(req, res){
 });
 
 app.get("/", function(req, res){
-  res.send("Soluchan hack for Hacktober by T-mobile");
+  res.send("Bhag ke......");
 });
 
 app.listen(process.env.PORT || 6969);
