@@ -52,7 +52,6 @@ function buildResponse(ing, total) {
   let textRes = "Shopping list for Brownies: ";
   ing.map(x => {
     textRes = textRes.concat(x + ", ");
-    counter++;
   })
   //console.log(total)
   textRes = textRes.concat(". Total should be: " + total);
