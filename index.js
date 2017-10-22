@@ -5,6 +5,8 @@ var prices = [];
 var total = 0;
 var ing = [];
 
+let totalCart = 0;
+
 app.get("/brownies", function(req, res){
 
 unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/extract?forceExtraction=false&url=http%3A%2F%2Fwww.melskitchencafe.com%2Fthe-best-fudgy-brownies%2F") // Recipe API
@@ -12,11 +14,11 @@ unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/
 .header("X-Mashape-Host", "spoonacular-recipe-food-nutrition-v1.p.mashape.com")
 .end(function (result) {
 	var count = 0;
-  //console.log(result.body.extendedIngredients);
+
   for(var i = 0; i < result.body.extendedIngredients.length;i++) // Looping through all the ingredients for the name
   {
   	ing.push(result.body.extendedIngredients[i].name); // Storing them
-  	//console.log(ing[i]);
+
   	walmart.stores.search(1003, ing[i]).then(function(data) { // Getting the item at local store
   	var prices = [];
   	var index = [];
@@ -24,11 +26,10 @@ unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/
   	{
   	prices.push(data.results[j].price.priceInCents);
 	}
-	//var prices_copy = prices.slice(); // Copying the array for reference later
+
 	prices.sort(); // Sorting it by price
-	//console.log(prices[0]);
 	total = total + prices[0]; // Calculating total
-	//console.log("Total " + total);
+
 	count ++;
 	if(count == (result.body.extendedIngredients.length )) // Checking if the total is final or not
 	{
@@ -47,23 +48,38 @@ unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/
 
 });
 
+app.post("/cart", function(request, res){
+
+  walmart.stores.search(1003, request.search).then(function(data) { // Getting the item at local store
+    var prices = [];
+    var index = [];
+    for(var i = 0; i < data.count ; i++){
+      console.log(data.results[i].name);
+      prices.push(data.results[i].price.priceInCents);
+    }
+  var prices_copy = prices.slice(); // Copying the array for reference later
+  prices.sort(); // Sorting it by price
+  totalCart = totalCart + prices[0];
+
+  res.send("Chu");
+  }
+
+});
+
+app.get("/getTotal", function(req, res){
+  res.send(totalCart/100);
+  totalCart = 0;
+})
 
 function buildResponse(ing, total) {
   let textRes = "Shopping list for Brownies: ";
   ing.map(x => {
     textRes = textRes.concat(x + ", ");
   })
-  //console.log(total)
-  textRes = textRes.concat(". Total should be: " + total);
+  textRes = textRes.concat(". Total should be: " + (total/100));
 
   return textRes;
 }
-
-//console.log(responseText);
-
-// app.get("/brownies", function(req, res){
-//   res.send("Added ingredients of chocolate brownies added to your Walmart Shopping List");
-// });
 
 app.get("/", function(req, res){
   res.send("Bhag ke......");
