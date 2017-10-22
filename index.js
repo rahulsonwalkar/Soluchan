@@ -62,7 +62,7 @@ app.post("/cart", function(request, res){
   totalCart = totalCart + prices[0];
 
   res.send("Chu");
-  }
+  })
 
 });
 
